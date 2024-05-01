@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../recordingpage/view/recordingpage.dart';
+
 class HomepageScreen extends StatefulWidget{
   @override
   State<HomepageScreen> createState() => _HomepageScreenState();
@@ -10,7 +12,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text("RECORDER"),
       ),
 
@@ -21,6 +25,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
           Container(
             height: MediaQuery.of(context).size.height*0.7,
             width: MediaQuery.of(context).size.width,
+           color: Colors.white,
             child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (context,index){
@@ -40,12 +45,19 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
 
                       ),
-                      trailing: Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey
+                      trailing: InkWell(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          height:  MediaQuery.of(context).size.height*.08,
+                          width: MediaQuery.of(context).size.width*0.095,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.withOpacity(.5)
+                          ),
+                          child: Icon(Icons.play_arrow,color: Colors.black,),
                         ),
-                        child: IconButton(onPressed: (){}, icon: Icon(Icons.play_arrow,color: Colors.black,)),
                       ),
                     ),
                   );
@@ -58,7 +70,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
 
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  color: Colors.white.withOpacity(.9),
+                  color: Colors.white,
                   boxShadow:[
                     BoxShadow(
                         color: Colors.grey,
@@ -70,19 +82,27 @@ class _HomepageScreenState extends State<HomepageScreen> {
                   ]
               ),
               child: Center(
-                child: Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        boxShadow:[
-                          BoxShadow(
-                              color: Colors.grey,
-                              spreadRadius: 1,
-                              blurRadius: 4
-                          )
-                        ]
-                    ),
-                    child: IconButton(onPressed: (){}, icon: Icon(Icons.circle,color: Colors.red,))),
+                child: InkWell(
+                  onTap: (){
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>RecordingpageScreen()));
+                  },
+                  child: Container(
+                      height:  MediaQuery.of(context).size.height*.1,
+                      width: MediaQuery.of(context).size.width*0.2,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          boxShadow:[
+                            BoxShadow(
+                                color: Colors.grey,
+                                spreadRadius: 1,
+                                blurRadius: 4
+                            )
+                          ]
+                      ),
+                      child:  Icon(Icons.circle,color: Colors.red,size: MediaQuery.of(context).size.height*.05)),
+                ),
               ),
             ),
           )

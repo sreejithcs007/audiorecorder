@@ -101,7 +101,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                             )
                           ]
                       ),
-                      child:  Icon(Icons.circle,color: Colors.red,size: MediaQuery.of(context).size.height*.05)),
+                      child:  Icon(Icons.mic,color: Colors.red,size: MediaQuery.of(context).size.height*.05)),
                 ),
               ),
             ),

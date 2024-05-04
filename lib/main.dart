@@ -1,6 +1,6 @@
 import 'package:audiorecorder/controller/reccontroller.dart';
 import 'package:audiorecorder/model/model_class.dart';
-import 'package:audiorecorder/screens/homepage/view/homepageview.dart';
+import 'package:audiorecorder/screens/splashscreen/view/splashscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Reccontroller())
       ],
-      child: MaterialApp(
-        home:  HomepageScreen(),
+      child: const MaterialApp(
+        home:  Splashscreen(),
       ),
     );
   }

@@ -11,10 +11,16 @@ class Reccontroller extends ChangeNotifier{
   List<Modelclasss> records = [];
   List<Modelclasss> revrecords = [];
 
-  int? selectedAudioIndex;
+  int? selectedAudioIndex = 0;
 
   var box = Hive.box('mybox');
 
+  int? selcindex(index) {
+    selectedAudioIndex = index;
+    notifyListeners();
+    return selectedAudioIndex;
+
+  }
 
   void delete(int index) {
     

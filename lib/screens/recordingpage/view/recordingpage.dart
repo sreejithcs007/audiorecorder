@@ -1,19 +1,18 @@
 import 'dart:async';
-
-
 import 'package:audiorecorder/controller/reccontroller.dart';
 import 'package:audiorecorder/model/model_class.dart';
 import 'package:audiorecorder/screens/homepage/view/homepageview.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:record/record.dart';
 
 class RecordingpageScreen extends StatefulWidget {
+  const RecordingpageScreen({super.key});
+
   @override
   State<RecordingpageScreen> createState() => _RecordingpageScreenState();
 }
@@ -44,7 +43,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedtime++;
       });
@@ -52,7 +51,6 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
   }
 
   Future<void> _startRecording() async {
-
     final bool isPermissionGranted = await _audioRecorder.hasPermission();
     if (!isPermissionGranted) {
       return;
@@ -60,7 +58,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
 
     final directory = await getApplicationDocumentsDirectory();
     fileName = "recording_${DateTime.now().millisecondsSinceEpoch}.mp";
-    key ="${DateTime.now().millisecondsSinceEpoch}";
+    key = "${DateTime.now().millisecondsSinceEpoch}";
     date = DateFormat('dd-MM-yyyy ').format(DateTime.now());
     _filePath = "${directory.path}/$fileName";
 
@@ -103,39 +101,40 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
   Widget build(BuildContext context) {
     String timerText =
         "${(_elapsedtime ~/ 3600).toString().padLeft(2, '0')}:${((_elapsedtime ~/ 60) % 60).toString().padLeft(2, '0')}:${(_elapsedtime % 60).toString().padLeft(2, '0')}";
-    print("Timertext $timerText");
-
-    print("filename:  $fileName");
-    print("Total duration $_totalDuration");
-    print("filepath $_filePath");
-    print("date $date");
 
     return Scaffold(
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.blue[100],
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,
             )),
-        title: Text("New recording "),
+        title: const Text("New recording "),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.4,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.4)
-            ),
-
-          ),
+          _isRecording == true
+              ? SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  width: MediaQuery.of(context).size.width,
+                  child: Lottie.asset(
+                      "assets/animation/Animation - 1714839713001.json"))
+              : SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.26,
+                  width: MediaQuery.of(context).size.width,
+                  child: const Image(
+                      image: AssetImage(
+                          "assets/image/8399350_mic_microphone_audio_icon.png"))),
           Text(
             timerText,
-            style: TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 45,fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -154,7 +153,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                 child: Container(
                     height: MediaQuery.of(context).size.height * .1,
                     width: MediaQuery.of(context).size.width * 0.2,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white,
                         boxShadow: [
@@ -180,8 +179,10 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                       });
                       bottomsheet(context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("press start button")));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("press start button"),
+                        backgroundColor: Colors.lightBlueAccent,
+                      ));
                     }
                   },
                   icon: Icon(
@@ -216,7 +217,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                 padding: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.05,
                     top: MediaQuery.of(context).size.height * 0.05),
-                child: Align(
+                child: const Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       "File Name",
@@ -233,7 +234,8 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                     right: MediaQuery.of(context).size.width * 0.05),
                 child: TextFormField(
                   controller: textcontroller,
-                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  decoration:
+                      const InputDecoration(border: OutlineInputBorder()),
                 ),
               ),
               Padding(
@@ -244,27 +246,32 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                   children: [
                     MaterialButton(
                       color: Colors.red,
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text("Cancel"),
+                      child: const Text("Cancel"),
                     ),
                     MaterialButton(
                       color: Colors.green,
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       onPressed: () {
                         var value = Modelclasss(
                           name: textcontroller.text,
                           location: _filePath,
-                          date: date, key: key!,
+                          date: date,
+                          key: key!,
                         );
                         Provider.of<Reccontroller>(context, listen: false)
                             .savedata(value);
 
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomepageScreen()));
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomepageScreen()),
+                            (route) => false);
                       },
-                      child: Text("Save"),
+                      child: const Text("Save"),
                     ),
                   ],
                 ),

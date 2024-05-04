@@ -11,13 +11,17 @@ class Reccontroller extends ChangeNotifier{
   List<Modelclasss> records = [];
   List<Modelclasss> revrecords = [];
 
+  int? selectedAudioIndex;
+
   var box = Hive.box('mybox');
 
 
   void delete(int index) {
+    
+    var id = revrecords[index].key;
 
 
-    box.deleteAt(index);
+    box.delete(id);
 
     getalldetails();
     notifyListeners();
@@ -25,8 +29,9 @@ class Reccontroller extends ChangeNotifier{
 
 
 
-  void savedata(Modelclasss value1) {
-    box.add(value1);
+  void savedata(Modelclasss value1, ) {
+     // box.add(value1);
+    box.put(value1.key, value1);
     records.addAll(box.values.map((value) => value));
     revrecords = records.reversed.toList();
 

@@ -4,12 +4,14 @@ part 'model_class.g.dart';
 @HiveType(typeId: 1)
 class Modelclasss{
   @HiveField(0)
-  final String? name;
+  String key;
   @HiveField(1)
-  final String? location;
+  final String? name;
   @HiveField(2)
+  final String? location;
+  @HiveField(3)
   final String? date;
 
 
-  Modelclasss({required this.name,required this.location,required this.date, });
+  Modelclasss({required this.name,required this.location,required this.date,required this.key });
 }

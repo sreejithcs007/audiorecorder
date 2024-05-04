@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:audiorecorder/controller/reccontroller.dart';
 import 'package:audiorecorder/model/model_class.dart';
+import 'package:audiorecorder/screens/homepage/view/homepageview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,6 +31,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
   late Timer _timer;
   int _elapsedtime = 0;
   String? fileName;
+  String? key;
 
   var textcontroller = TextEditingController();
 
@@ -58,6 +60,7 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
 
     final directory = await getApplicationDocumentsDirectory();
     fileName = "recording_${DateTime.now().millisecondsSinceEpoch}.mp";
+    key ="${DateTime.now().millisecondsSinceEpoch}";
     date = DateFormat('dd-MM-yyyy ').format(DateTime.now());
     _filePath = "${directory.path}/$fileName";
 
@@ -254,12 +257,12 @@ class _RecordingpageScreenState extends State<RecordingpageScreen> {
                         var value = Modelclasss(
                           name: textcontroller.text,
                           location: _filePath,
-                          date: date,
+                          date: date, key: key!,
                         );
                         Provider.of<Reccontroller>(context, listen: false)
                             .savedata(value);
 
-                        Navigator.pop(context);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomepageScreen()));
                       },
                       child: Text("Save"),
                     ),

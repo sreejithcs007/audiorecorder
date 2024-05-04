@@ -29,13 +29,24 @@ class _HomepageScreenState extends State<HomepageScreen> {
       await _audioPlayer.setFilePath(filePath!);
       totalduration = _audioPlayer.duration?.inSeconds.toDouble() ?? 0;
       _audioPlayer.play();
-
+_currentposition = 0;
       _audioPlayer.positionStream.listen((position) {
         setState(() {
           _currentposition = position.inSeconds.toDouble();
         });
       });
+
     }
+    _audioPlayer.playerStateStream.listen((event) {
+  if(event.processingState == ProcessingState.completed){
+    setState(() {
+      _currentposition = 0;
+      isplaying = false;
+    });
+  }
+
+    });
+
   }
 
   Future<void> pauserecording() async {
@@ -71,19 +82,12 @@ class _HomepageScreenState extends State<HomepageScreen> {
                 child: ListView.builder(
                     itemCount: provider.revrecords.length,
                     itemBuilder: (context, index) {
+                      print(provider.revrecords[index].name ?? " ");
                       return Card(
                         child: ExpansionTile(
                           title: Text(provider.revrecords[index].name ?? " "),
-                          subtitle: Row(
-                            children: [
-                              Text(totalduration.toString()),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                    provider.revrecords[index].date ?? " No"),
-                              )
-                            ],
-                          ),
+                          subtitle: Text(
+                              provider.revrecords[index].date ?? " No"),
                           trailing: Text(""),
                           children: [
                             Row(
@@ -91,6 +95,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                               children: [
                                 InkWell(
                                   onTap: () {
+                                    setState(() {
+                                      provider.selectedAudioIndex = index;
+                                    });
                                     setState(() {
                                       isplaying = !isplaying;
                                     });
@@ -113,22 +120,51 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: Colors.grey.withOpacity(.5)),
-                                      child: isplaying == false
-                                          ? Icon(
-                                              Icons.play_arrow,
-                                              color: Colors.black,
-                                            )
-                                          : Icon(
-                                              Icons.pause,
-                                              color: Colors.black,
-                                            )),
+                                    child: (provider.selectedAudioIndex == index && isplaying)
+                                        ? IconButton(
+                                      onPressed: () {
+                                        pauserecording();
+                                        setState(() {
+                                          isplaying = false;
+                                        });
+                                      },
+                                      icon: Icon(Icons.pause, color: Colors.black),
+                                    )
+                                        : (provider.selectedAudioIndex == index)
+                                        ? IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isplaying = true;
+                                        });
+                                        var flnme = Provider.of<Reccontroller>(context, listen: false)
+                                            .revrecords[index]
+                                            .location;
+                                        _playRecording(flnme);
+                                      },
+                                      icon: Icon(Icons.play_arrow, color: Colors.black),
+                                    )
+                                        : IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          provider.selectedAudioIndex = index;
+                                          isplaying = true;
+                                        });
+                                        var flnme = Provider.of<Reccontroller>(context, listen: false)
+                                            .revrecords[index]
+                                            .location;
+                                        _playRecording(flnme);
+                                      },
+                                      icon: Icon(Icons.play_arrow, color: Colors.black),
+                                    ),
+
+                                  ),
                                 ),
                                 Container(
                                   height:
                                       MediaQuery.of(context).size.height * 0.02,
                                   width:
                                       MediaQuery.of(context).size.width * 0.75,
-                                  child: Slider(
+                                  child: (provider.selectedAudioIndex == index)? Slider(
                                     value: _currentposition,
                                     max: totalduration,
                                     onChanged: (value) {
@@ -138,7 +174,9 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                       _audioPlayer.seek(
                                           Duration(seconds: value.toInt()));
                                     },
-                                  ),
+                                  ):  Slider(value: 0, onChanged: (val){
+                                    return null;
+                                  }),
                                 ),
                                 PopupMenuButton(itemBuilder: (context) {
                                   return [
@@ -147,6 +185,7 @@ class _HomepageScreenState extends State<HomepageScreen> {
                                             onPressed: () {
 
                                               Provider.of<Reccontroller>(context, listen: false).delete(index);
+                                              Navigator.pop(context);
 
 
                                             },

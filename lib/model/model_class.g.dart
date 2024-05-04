@@ -17,21 +17,24 @@ class ModelclasssAdapter extends TypeAdapter<Modelclasss> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Modelclasss(
-      name: fields[0] as String?,
-      location: fields[1] as String?,
-      date: fields[2] as String?,
+      name: fields[1] as String?,
+      location: fields[2] as String?,
+      date: fields[3] as String?,
+      key: fields[0] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Modelclasss obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.key)
       ..writeByte(1)
-      ..write(obj.location)
+      ..write(obj.name)
       ..writeByte(2)
+      ..write(obj.location)
+      ..writeByte(3)
       ..write(obj.date);
   }
 

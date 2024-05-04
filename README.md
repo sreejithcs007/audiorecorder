@@ -1,6 +1,8 @@
 # audiorecorder
 
 A new Flutter project.
+storage = Hive
+StateManagement = Provider
 
 ## Getting Started
 

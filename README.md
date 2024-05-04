@@ -1,7 +1,20 @@
 # audiorecorder
- - A new Flutter project.
+ - recording app used to record voice or musics.
  - storage = Hive
  - StateManagement = Provider
+
+# packages used
+
+  - record
+  - just_audio
+  - permission_handler
+  - hive
+  - hive flutter
+  - provider
+  - share plus
+  - lottie
+
+
 
 
 
